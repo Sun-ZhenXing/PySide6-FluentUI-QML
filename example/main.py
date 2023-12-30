@@ -1,28 +1,29 @@
-# This Python file uses the following encoding: utf-8
 import os
 import sys
 
-# 注册资源以及自定义的QML组件
-import helper.Log as Log
-from AppInfo import AppInfo
-from helper.SettingsHelper import SettingsHelper
+sys.path.append(".")
+
+
 from PySide6.QtCore import QProcess
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtNetwork import QNetworkProxy
 from PySide6.QtQml import QQmlApplicationEngine
 
-# 请通过launch.json运行，直接运行main.py不会执行pyside6-rcc，而导致资源文件缺少，具体逻辑查看tasks.json与Scripts/qrc2py.py
-# 需要输出exe，安装pip install pyinstaller，然后pyinstaller example/main.spec，打包之前请先执行tasks.json，导出example_rc.py资源文件
-# example_rc.py位置在example/resource文件夹下
-# ----------------------------------------------------------
-# 运行之前先保证 PySide6-FluentUI-QML 已安装
-# pip install PySide6-FluentUI-QML
-# or
-# sys.path.append("D:\PyProjects\PySide6-FluentUI-QML")
+import example.helpers.Log as Log
+import example.resources.example_rc as example_rc
 import FluentUI
+from example.AppInfo import AppInfo
+from example.components.CircularReveal import CircularReveal
+from example.components.FileWatcher import FileWatcher
+from example.components.FpsItem import FpsItem
+from example.helpers.SettingsHelper import SettingsHelper
 
-# ----------------------------------------------------------
-# tips：如果使用QtCreator进行QML编写 import FluentUI爆红导致代码无法自动补全，请按https://github.com/zhuzichu520/PySide6-FluentUI-QML/wiki/Qml-code-completion 这个方法解决
+_ = (
+    example_rc,
+    CircularReveal,
+    FileWatcher,
+    FpsItem,
+)
 
 
 def main():
@@ -46,7 +47,6 @@ def main():
         sys.exit(-1)
     exec = app.exec()
     if exec == 931:
-        # QGuiApplication.applicationFilePath()需要打包成exe后才能正确的路径重启，不然这个函数获取的路径是python的路径
         args = QGuiApplication.arguments()[1:]
         QProcess.startDetached(QGuiApplication.applicationFilePath(), args)
     return exec
