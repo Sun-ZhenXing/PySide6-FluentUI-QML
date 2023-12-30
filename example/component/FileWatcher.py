@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 
-from PySide6.QtCore import QObject, Signal, Property, QFileSystemWatcher
-from PySide6.QtQml import (QmlNamedElement)
+from PySide6.QtCore import Property, QFileSystemWatcher, QObject, Signal
+from PySide6.QtQml import QmlNamedElement
 
 QML_IMPORT_NAME = "example"
 QML_IMPORT_MAJOR_VERSION = 1
@@ -9,7 +9,6 @@ QML_IMPORT_MAJOR_VERSION = 1
 
 @QmlNamedElement("FileWatcher")
 class FileWatcher(QObject):
-
     fileChanged = Signal()
     pathChanged = Signal()
 
@@ -22,13 +21,15 @@ class FileWatcher(QObject):
             self.fileChanged.emit()
             self.clean()
             self._watcher.addPath(path)
+
         self._watcher.fileChanged.connect(lambda path: onFileChanged(path))
 
         def onPathChanged():
             self.clean()
             self._watcher.addPath(self._path.replace("file:///", ""))
+
         self.pathChanged.connect(lambda: onPathChanged())
-        if (self._path != ""):
+        if self._path != "":
             self._watcher.addPath(self._path)
 
     def clean(self):

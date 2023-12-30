@@ -1,26 +1,23 @@
 import setuptools
 
-with open('README.md', encoding='utf-8') as f:
+with open("README.md", encoding="utf-8") as f:
     long_description = f.read()
 
 setuptools.setup(
-    name = "PySide6-FluentUI-QML",
-    version = "1.6.4",
+    name="PySide6-FluentUI-QML",
+    version="1.6.4",
     keywords="pyside fluent qml",
     author="ZhuZiChu",
     author_email="zhuzichu520@outlook.com",
     description="A fluent design qml library based on PySide6",
     long_description=long_description,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     license="MIT",
     url="https://github.com/zhuzichu520/FluentUI",
     packages=setuptools.find_namespace_packages(
-                     include=["FluentUI", "FluentUI.*"], ),
+        include=["FluentUI", "FluentUI.*"],
+    ),
     include_package_data=True,
-    install_requires=[
-        "PySide6>=6.6.0"
-    ],
-    classifiers=[
-        'Programming Language :: Python :: 3'
-    ]
+    install_requires=["PySide6>=6.6.0"],
+    classifiers=["Programming Language :: Python :: 3"],
 )

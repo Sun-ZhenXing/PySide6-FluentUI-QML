@@ -1,7 +1,15 @@
 # This Python file uses the following encoding: utf-8
 
-from PySide6.QtCore import QObject, Slot, QDataStream, QStandardPaths, QSettings, QByteArray, QIODevice, QCoreApplication, QCoreApplication
 from define import Singleton
+from PySide6.QtCore import (
+    QByteArray,
+    QDataStream,
+    QIODevice,
+    QObject,
+    QSettings,
+    QStandardPaths,
+    Slot,
+)
 
 
 @Singleton
@@ -12,8 +20,11 @@ class SettingsHelper(QObject):
 
     def init(self):
         iniFileName = "example.ini"
-        iniFilePath = QStandardPaths.writableLocation(
-            QStandardPaths.AppLocalDataLocation)+"/"+iniFileName
+        iniFilePath = (
+            QStandardPaths.writableLocation(QStandardPaths.AppLocalDataLocation)
+            + "/"
+            + iniFileName
+        )
         self._settings = QSettings(iniFilePath, QSettings.IniFormat)
         print("Application configuration file path ->", self._settings.fileName)
 
@@ -63,4 +74,4 @@ class SettingsHelper(QObject):
 
     @Slot(bool)
     def saveUseSystemAppBar(self, useSystemAppBar):
-        self._save("useSystemAppBar", useSystemAppBar)    
+        self._save("useSystemAppBar", useSystemAppBar)

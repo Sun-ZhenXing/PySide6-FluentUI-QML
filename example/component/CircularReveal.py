@@ -1,9 +1,23 @@
 # This Python file uses the following encoding: utf-8
-from typing import Tuple
-from PySide6.QtCore import QObject, Slot, Signal, Property, QPoint, QRect, QPropertyAnimation, QPointF, Qt, QSize, QEasingCurve
-from PySide6.QtGui import QPainter, QImage, QPainterPath
-from PySide6.QtQuick import QQuickPaintedItem, QQuickItem, QQuickItemGrabResult, QSharedPointer_QQuickItemGrabResult
-from PySide6.QtQml import (QmlNamedElement)
+from PySide6.QtCore import (
+    Property,
+    QEasingCurve,
+    QPoint,
+    QPointF,
+    QPropertyAnimation,
+    QRect,
+    QSize,
+    Qt,
+    Signal,
+    Slot,
+)
+from PySide6.QtGui import QImage, QPainter, QPainterPath
+from PySide6.QtQml import QmlNamedElement
+from PySide6.QtQuick import (
+    QQuickItem,
+    QQuickPaintedItem,
+    QSharedPointer_QQuickItemGrabResult,
+)
 
 QML_IMPORT_NAME = "example"
 QML_IMPORT_MAJOR_VERSION = 1
@@ -11,7 +25,6 @@ QML_IMPORT_MAJOR_VERSION = 1
 
 @QmlNamedElement("CircularReveal")
 class CircularReveal(QQuickPaintedItem):
-
     imageChanged = Signal()
     animationFinished = Signal()
     targetChanged = Signal()
@@ -22,8 +35,7 @@ class CircularReveal(QQuickPaintedItem):
         self._target: QQuickItem = None
         self._radius: int = 0
         self._source: QImage = QImage()
-        self._anim: QPropertyAnimation = QPropertyAnimation(
-            self, b"radius", self)
+        self._anim: QPropertyAnimation = QPropertyAnimation(self, b"radius", self)
         self._center: QPoint = None
         self._grabResult: QSharedPointer_QQuickItemGrabResult = None
         self.setVisible(False)
@@ -34,21 +46,24 @@ class CircularReveal(QQuickPaintedItem):
             self.update()
             self.setVisible(False)
             self.animationFinished.emit()
+
         self._anim.finished.connect(lambda: animFinish())
         self.radiusChanged.connect(lambda: self.update())
 
     def paint(self, painter: QPainter):
-        if (self._source == None):
+        if self._source is None:
             return
         painter.save()
         painter.drawImage(
-            QRect(0, 0, self.boundingRect().width(), self.boundingRect().height()), self._source)
+            QRect(0, 0, self.boundingRect().width(), self.boundingRect().height()),
+            self._source,
+        )
         path = QPainterPath()
         path.moveTo(self._center.x(), self._center.y())
-        path.addEllipse(QPointF(self._center.x(), self._center.y()),
-                        self._radius, self._radius)
-        painter.setCompositionMode(
-            QPainter.CompositionMode.CompositionMode_Clear)
+        path.addEllipse(
+            QPointF(self._center.x(), self._center.y()), self._radius, self._radius
+        )
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Clear)
         painter.fillPath(path, Qt.GlobalColor.black)
         painter.restore()
 

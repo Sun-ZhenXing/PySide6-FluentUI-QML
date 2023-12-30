@@ -1,7 +1,16 @@
 # This Python file uses the following encoding: utf-8
 
-from PySide6.QtCore import Qt, QMessageLogContext, qInstallMessageHandler, qSetMessagePattern,qFormatLogMessage, QFile, QTextStream,QtMsgType,QStandardPaths
 import sys
+
+from PySide6.QtCore import (
+    QFile,
+    QStandardPaths,
+    QTextStream,
+    QtMsgType,
+    qFormatLogMessage,
+    qInstallMessageHandler,
+    qSetMessagePattern,
+)
 
 QT_ENDL = "\n"
 
@@ -10,6 +19,7 @@ g_logError = False
 
 g_logFile = None
 g_logStream = None
+
 
 def myMessageHandler(type, context, message):
     global g_logError, g_logFile, g_logStream
@@ -24,12 +34,17 @@ def myMessageHandler(type, context, message):
         return
     if g_logFile is None:
         logFileName = f"debug-{g_app}.log"
-        logFilePath = QStandardPaths.writableLocation(
-            QStandardPaths.AppLocalDataLocation)+"/"+logFileName
+        logFilePath = (
+            QStandardPaths.writableLocation(QStandardPaths.AppLocalDataLocation)
+            + "/"
+            + logFileName
+        )
         g_logFile = QFile(logFilePath)
         print("Application log file path ->", logFilePath)
         if not g_logFile.open(QFile.WriteOnly | QFile.Text | QFile.Append):
-            print(f"Can't open file to write: {g_logFile.errorString()}", file=sys.stderr)
+            print(
+                f"Can't open file to write: {g_logFile.errorString()}", file=sys.stderr
+            )
             g_logFile = None
             g_logError = True
             return
@@ -37,6 +52,7 @@ def myMessageHandler(type, context, message):
         g_logStream = QTextStream()
         g_logStream.setDevice(g_logFile)
     g_logStream << finalMessage << QT_ENDL
+
 
 def setup(app):
     global g_app
@@ -47,5 +63,6 @@ def setup(app):
     qSetMessagePattern(
         "[%{time yyyy/MM/dd hh:mm:ss.zzz}] <%{if-info}INFO%{endif}%{if-debug}DEBUG"
         "%{endif}%{if-warning}WARNING%{endif}%{if-critical}CRITICAL%{endif}%{if-fatal}"
-        "FATAL%{endif}> %{if-category}%{category}: %{endif}%{message}")
+        "FATAL%{endif}> %{if-category}%{category}: %{endif}%{message}"
+    )
     qInstallMessageHandler(myMessageHandler)

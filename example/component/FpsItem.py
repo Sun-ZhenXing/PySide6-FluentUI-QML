@@ -1,8 +1,8 @@
 # This Python file uses the following encoding: utf-8
 
-from PySide6.QtCore import Qt, QTimer, Signal, Property
+from PySide6.QtCore import Property, Qt, QTimer, Signal
+from PySide6.QtQml import QmlNamedElement
 from PySide6.QtQuick import QQuickPaintedItem
-from PySide6.QtQml import (QmlNamedElement)
 
 QML_IMPORT_NAME = "example"
 QML_IMPORT_MAJOR_VERSION = 1
@@ -10,7 +10,6 @@ QML_IMPORT_MAJOR_VERSION = 1
 
 @QmlNamedElement("FpsItem")
 class FpsItem(QQuickPaintedItem):
-
     fpsChanged = Signal()
 
     def __init__(self):
@@ -26,9 +25,10 @@ class FpsItem(QQuickPaintedItem):
         self._frameCount += 1
 
     def onWindowChanged(self):
-        if (self.window()):
+        if self.window():
             self.window().afterRendering.connect(
-                lambda: self.frameCountIncrease(), Qt.ConnectionType.DirectConnection)
+                lambda: self.frameCountIncrease(), Qt.ConnectionType.DirectConnection
+            )
 
     def onTimeout(self):
         self.fps = self._frameCount
